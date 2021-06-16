@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Lets Chat</string>
+    <string name="splashscreen">SPLASHSCREEN</string>
+    <string name="background">BACKGROUND</string>
+    <string name="email">Email...</string>
+    <string name="password">Password...</string>
+    <string name="forgot_your_password">Forgot your password?</string>
+    <string name="new_here_sign_up">New here? Sign up</string>
+    <string name="user_name">Enter Username..</string>
+    <string name="welcome">Welcome,</string>
+    <string name="already_a_user_sign_in">Already a user? Sign in</string>
+    <string name="name">Name</string>
+    <string name="chats">CHATS</string>
+    <string name="status">STATUS</string>
+    <string name="search">SEARCH</string>
+    <string name="logout">Logout</string>
+    <string name="settings">Settings</string>
+    <string name="your_email">Your Email</string>
+    <string name="reset">Reset</string>
+    <string name="by_clicking_reset_you_will_receive_an_email_to_reset_your_password">By clicking reset, you will receive an email to reset your password</string>
+
+    <string name="facebook_app_id">941273926633406</string>
+    <string name="fb_login_protocol_scheme">fb941273926633406</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="waiting_to_search">Waiting to search!</string>
+    <string name="no_messages">No Messages!</string>
+    <string name="no_status_yet">No Status yet!</string>
+    <string name="profile">Profile</string>
+    <string name="type_a_message">Type a Message</string>
+    <string name="hello">Hello</string>
+
+</resources>
