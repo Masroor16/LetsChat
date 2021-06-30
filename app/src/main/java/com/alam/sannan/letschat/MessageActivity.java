@@ -98,6 +98,8 @@ public class MessageActivity extends AppCompatActivity {
 
     User user;
 
+    boolean isImage = false;
+
     boolean notify = false;
 
     @Override
@@ -139,6 +141,7 @@ public class MessageActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 notify = true;
+                isImage = false;
                 String msg = message.getText().toString();
                 firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -190,7 +193,11 @@ public class MessageActivity extends AppCompatActivity {
         sendImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openImage();
+                isImage =true;
+                Intent i = new Intent();
+                i.setType("image/*");
+                i.setAction(i.ACTION_GET_CONTENT);
+                startActivityForResult(i,IMAGE_REQUEST);
             }
         });
 
@@ -219,12 +226,7 @@ public class MessageActivity extends AppCompatActivity {
 
     }
 
-    private void openImage(){
-        Intent i = new Intent();
-        i.setType("image/*");
-        i.setAction(i.ACTION_GET_CONTENT);
-        startActivityForResult(i,IMAGE_REQUEST);
-    }
+
 
     private  String getFileExtension(Uri uri){
         ContentResolver contentResolver = Objects.requireNonNull(MessageActivity.this).getContentResolver();
@@ -248,9 +250,6 @@ public class MessageActivity extends AppCompatActivity {
     }
 
     private void uploadImage() {
-        ProgressBar progressBar;
-        progressBar =findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.VISIBLE);
 
         if (imageUri != null){
             final  StorageReference fileReference = storageReference.child(System.currentTimeMillis()
@@ -270,23 +269,26 @@ public class MessageActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task task) {
                     if (task.isSuccessful()){
                         Uri downloadUri = (Uri) task.getResult();
+                        assert downloadUri != null;
                         String mUri = downloadUri.toString();
 
-                        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+                        sendMessage(firebaseUser.getUid(), userid, mUri);
+
+                        /*reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
                         HashMap<String, Object> map = new HashMap<>();
                         map.put("imageURL",mUri);
-                        reference.updateChildren(map);
-                        progressBar.setVisibility(View.GONE);
+                        reference.updateChildren(map);*/
                     }else{
                         Toast.makeText(MessageActivity.this, "Failed!!", Toast.LENGTH_SHORT).show();
-                        progressBar.setVisibility(View.GONE);
                     }
+
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
+                    isImage =false;
                     Toast.makeText(MessageActivity.this, e.getMessage() , Toast.LENGTH_SHORT).show();
-                    progressBar.setVisibility(View.GONE);
+
                 }
             });
         }
@@ -324,6 +326,7 @@ public class MessageActivity extends AppCompatActivity {
         hashMap.put("receiver", receiver);
         hashMap.put("message", message);
         hashMap.put("isseen", false);
+        hashMap.put("isimage",isImage);
 
         reference.child("Chats").push().setValue(hashMap);
 
@@ -345,7 +348,7 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
 
-        String msg =message;
+        final String msg =message;
 
         reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
         reference.addValueEventListener(new ValueEventListener() {
@@ -353,7 +356,6 @@ public class MessageActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
                 if (notify) {
-                    assert user != null;
                     sendNotification(receiver, user.getUsername(), msg);
                 }
 
@@ -380,17 +382,15 @@ public class MessageActivity extends AppCompatActivity {
                     Data data = new Data(firebaseUser.getUid(), R.drawable.profile_img, username+": "+message,
                             "New Message",userid);
 
-                    assert token != null;
                     Sender sender = new Sender(data, token.getToken());
 
                     apiService.sendNotification(sender)
                             .enqueue(new Callback<MyResponse>() {
                                 @Override
-                                public void onResponse(@NotNull Call<MyResponse> call, @NotNull Response<MyResponse> response) {
+                                public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
                                     if (response.code() == 200){
-                                        assert response.body() != null;
                                         if (response.body().success != 1){
-                                            Toast.makeText(MessageActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(MessageActivity.this, "Failed!", Toast.LENGTH_LONG).show();
                                         }
                                     }
                                 }

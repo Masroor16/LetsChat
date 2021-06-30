@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/navigation_chat"
-        android:icon="@drawable/ic_baseline_chat_bubble_24"
+        android:icon="@drawable/navigation_chat_selector"
         android:title="@string/chats" />
    <!-- <item
         android:id="@+id/navigation_status"
@@ -10,6 +10,6 @@
         android:title="@string/status" /> -->
     <item
         android:id="@+id/navigation_search"
-        android:icon="@drawable/ic_baseline_search_24_unselected"
+        android:icon="@drawable/navigation_search_selector"
         android:title="@string/search" />
 </menu>

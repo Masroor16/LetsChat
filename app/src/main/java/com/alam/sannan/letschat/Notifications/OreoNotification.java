@@ -21,7 +21,7 @@ public class OreoNotification extends ContextWrapper {
     public OreoNotification(Context base) {
         super(base);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+        if (Build.VERSION.SDK_INT >= 29){
             createChannel();
         }
     }
@@ -56,7 +56,7 @@ public class OreoNotification extends ContextWrapper {
                 .setContentText(body)
                 .setSmallIcon(Integer.parseInt(icon))
                 .setSound(soundUri)
-                .setAutoCancel(true)
+                .setAutoCancel(false)
                 .setPriority(Notification.PRIORITY_HIGH);
     }
 }

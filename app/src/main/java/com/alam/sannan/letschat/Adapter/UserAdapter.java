@@ -1,5 +1,6 @@
 package com.alam.sannan.letschat.Adapter;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -7,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -100,25 +103,42 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
             });
         }
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(mContext, MessageActivity.class);
+                i.putExtra("userid",user.getId());
+                mContext.startActivity(i);
+            }
+        });
+
+
 
         holder.profile_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Dialog builder = new Dialog(mContext);
-                builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                builder.getWindow().setBackgroundDrawable(
-                        new ColorDrawable(Color.TRANSPARENT)
-                );
-                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        //nothing
-                        builder.dismiss();
-                    }
-                });
-                builder.setContentView(dialogLayout);
+                try {
+                    Dialog builder = new Dialog(mContext);
+                    builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    builder.getWindow().setBackgroundDrawable(
+                            new ColorDrawable(Color.TRANSPARENT)
+                    );
 
-                builder.show();
+                    builder.setContentView(dialogLayout);
+                    builder.show();
+                    builder.setCanceledOnTouchOutside(false);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            //nothing
+                            dialog.dismiss();
+                        }
+                    });
+
+                }catch (Exception e){
+                    Log.e("Error!!!!!!!Bro",e.toString());
+                    Toast.makeText(mContext, e.toString(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

@@ -20,12 +20,24 @@
         android:textSize="18sp"
         android:text="@string/hello"
         android:textColor="#3a3a3a"
+        android:visibility="visible"
+        android:background="@drawable/background_left"/>
+
+    <ImageView
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:src="@drawable/spidy"
+        android:id="@+id/show_pic"
+        android:layout_toEndOf="@+id/profile_image"
+        android:layout_marginStart="5dp"
+        android:visibility="gone"
         android:background="@drawable/background_left"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txt_seen"
+        android:textColor="@color/black"
         android:visibility="gone"
         android:layout_below="@id/show_message"
         android:layout_alignParentStart="true"/>

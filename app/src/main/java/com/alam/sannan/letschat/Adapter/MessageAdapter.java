@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alam.sannan.letschat.Model.Chat;
 import com.alam.sannan.letschat.R;
+import com.alam.sannan.letschat.SettingsActivity;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,10 +29,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     private final String imageURL;
     FirebaseUser firebaseUser;
 
+
+
     public MessageAdapter(Context mContext, List<Chat> mChat, String imageURL) {
         this.mContext = mContext;
         this.mChat = mChat;
         this.imageURL = imageURL;
+
     }
 
     @NonNull
@@ -50,7 +54,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public void onBindViewHolder(@NonNull MessageAdapter.ViewHolder holder, int position) {
 
         Chat chat = mChat.get(position);
-        holder.show_message.setText(chat.getMessage());
+        if (chat.isIsimage()){
+            Glide.with(mContext).load(chat.getMessage()).into(holder.image);
+            holder.show_message.setVisibility(View.GONE);
+            holder.image.setVisibility(View.VISIBLE);
+        }else {
+            holder.show_message.setText(chat.getMessage());
+            holder.show_message.setVisibility(View.VISIBLE);
+            holder.image.setVisibility(View.GONE);
+        }
 
         if (imageURL != null  && imageURL.equals("default")){
             holder.profile_image.setImageResource(R.drawable.profile_img);
@@ -77,7 +89,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public static class ViewHolder extends RecyclerView.ViewHolder{
 
         public TextView show_message;
-        public ImageView profile_image;
+        public ImageView profile_image,image;
         public TextView txt_seen;
 
         public ViewHolder(View itemView){
@@ -86,6 +98,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             show_message = itemView.findViewById(R.id.show_message);
             profile_image = itemView.findViewById(R.id.profile_image);
             txt_seen = itemView.findViewById(R.id.txt_seen);
+            image = itemView.findViewById(R.id.show_pic);
         }
     }
 

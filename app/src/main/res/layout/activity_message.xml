@@ -47,6 +47,8 @@
         android:layout_below="@+id/bar_layout"
         android:layout_above="@+id/message_bar"/>
 
+
+
     <RelativeLayout
         android:id="@+id/message_bar"
         android:layout_width="match_parent"
@@ -68,8 +70,9 @@
             android:layout_height="wrap_content"
             android:hint="@string/type_a_message"
             android:textColorHint="#A2A2A2"
+            android:textColor="@color/black"
             android:layout_toEndOf="@+id/addImg"
-            android:layout_toLeftOf="@+id/btn_send"
+            android:layout_toStartOf="@+id/btn_send"
             android:layout_centerVertical="true"
             android:background="@android:color/transparent"/>
 

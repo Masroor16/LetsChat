@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.alam.sannan.letschat.Fragments.ChatFragment;
 import com.alam.sannan.letschat.Fragments.SearchFragment;
 import com.alam.sannan.letschat.Fragments.StatusFragment;
+import com.alam.sannan.letschat.Model.Chat;
 import com.alam.sannan.letschat.Model.User;
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -59,7 +60,6 @@ public class HomeActivity extends AppCompatActivity {
         profile_Image = findViewById(R.id.profile_image);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
-
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -82,6 +82,35 @@ public class HomeActivity extends AppCompatActivity {
                 Toast.makeText(HomeActivity.this,"Database Error!!", Toast.LENGTH_SHORT).show();
             }
         });
+
+        reference = FirebaseDatabase.getInstance().getReference("Chats");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                int unread = 0;
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    Chat chat = dataSnapshot.getValue(Chat.class);
+                    if (chat.getReceiver().equals(firebaseUser.getUid()) && !chat.isIsseen()){
+                        unread++;
+                    }
+                }
+
+                if (unread == 0){
+                    //viewPagerAdapter.addFragment(new ChatsFragment(),"Chats");
+                }else {
+                    //viewPagerAdapter.addFragment(new ChatsFragment(),"("+unread+") Chats");
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
     @Override
@@ -130,4 +159,6 @@ public class HomeActivity extends AppCompatActivity {
                     return false;
                 }
             };
+
+
 }

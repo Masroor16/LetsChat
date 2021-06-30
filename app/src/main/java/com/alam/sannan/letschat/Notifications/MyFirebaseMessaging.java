@@ -33,15 +33,12 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (firebaseUser != null) {
-            assert sented != null;
-            if (sented.equals(firebaseUser.getUid())) {
-                if (!currentUser.equals(user)) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        sendOreoNotification(remoteMessage);
-                    } else {
-                        sendNotification(remoteMessage);
-                    }
+        if (firebaseUser != null && sented.equals(firebaseUser.getUid())){
+            if (!currentUser.equals(user)) {
+                if (Build.VERSION.SDK_INT >= 29) {
+                    sendOreoNotification(remoteMessage);
+                } else {
+                    sendNotification(remoteMessage);
                 }
             }
         }
@@ -100,10 +97,9 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
                 .setSmallIcon(Integer.parseInt(icon))
                 .setContentTitle(title)
                 .setContentText(body)
-                .setAutoCancel(true)
+                .setAutoCancel(false)
                 .setSound(defaultSound)
-                .setContentIntent(pendingIntent)
-                .setPriority(Notification.PRIORITY_HIGH);
+                .setContentIntent(pendingIntent);
         NotificationManager noti = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 
         int i = 0;

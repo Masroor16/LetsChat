@@ -11,9 +11,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/search_user"
+        android:textColor="@color/black"
         android:layout_margin="5dp"
         android:textColorHint="#bababa"
         android:hint="@string/search"/>
+
+    <TableRow
+        android:layout_below="@+id/search_user"
+        android:id="@+id/hr"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#3a3a3a"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_below="@+id/search_user"
